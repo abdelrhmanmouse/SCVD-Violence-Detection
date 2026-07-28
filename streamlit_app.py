@@ -182,11 +182,24 @@ uploaded_file = None
 video_path = None
 
 if source_choice == "فيديو الاختبار الجاهز":
-    if os.path.exists("test.mp4"):
-        video_path = "test.mp4"
+    ready_videos = {
+        "فيديو الاختبار الأول": "test.mp4",
+        "فيديو الاختبار الثاني": "test2.mp4",
+    }
+    available_videos = {
+        label: path
+        for label, path in ready_videos.items()
+        if os.path.exists(path)
+    }
+    if available_videos:
+        selected_video = st.selectbox(
+            "اختر فيديو جاهزًا",
+            options=list(available_videos.keys()),
+        )
+        video_path = available_videos[selected_video]
         st.video(video_path)
     else:
-        st.error("ملف test.mp4 غير موجود في المستودع.")
+        st.error("لا توجد فيديوهات اختبار جاهزة في المستودع.")
 else:
     uploaded_file = st.file_uploader(
         "ارفع فيديو المراقبة",
