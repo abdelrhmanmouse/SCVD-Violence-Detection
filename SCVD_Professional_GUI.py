@@ -720,7 +720,13 @@ def build_explanation(rows, events, duration, alert_threshold):
         </div>
     </section>
     """
-    return explanation_html.strip(), {
+    # Keep the fragment on one logical line. Markdown treats indented HTML
+    # following a blank line as a code block, which exposes the tags in
+    # Streamlit instead of rendering the report.
+    explanation_html = " ".join(
+        line.strip() for line in explanation_html.splitlines() if line.strip()
+    )
+    return explanation_html, {
         "duration_seconds": duration,
         "risk_level": risk_level,
         "headline_ar": headline,
