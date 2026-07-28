@@ -130,6 +130,13 @@ st.markdown(
     .event-card { padding:12px; border-radius:10px; display:flex; flex-direction:column; }
     .violence-event { background:#ef444420; border:1px solid #ef444480; }
     .weapon-event { background:#f59e0b20; border:1px solid #f59e0b80; }
+    .safe-card { display:flex; gap:11px; align-items:center; margin-top:15px; }
+    .safe-card div { display:flex; flex-direction:column; }
+    .safe-icon {
+        display:grid; place-items:center; width:36px; height:36px;
+        border-radius:50%; background:#22c55e24; color:#4ade80;
+        font-size:19px; font-weight:900;
+    }
     div[data-testid="stDataFrame"] {
         background:#fff; border-radius:12px; overflow:hidden;
     }

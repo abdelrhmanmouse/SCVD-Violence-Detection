@@ -1,4 +1,5 @@
 import os
+import subprocess
 import tempfile
 
 import cv2
@@ -355,7 +356,7 @@ def build_timeline(events, duration):
         for event in events
     )
 
-    return f"""
+    timeline_html = f"""
     <div class="timeline-panel">
         <div class="timeline-heading">الخط الزمني للأحداث</div>
         <div class="timeline-track">{markers}</div>
@@ -365,6 +366,9 @@ def build_timeline(events, duration):
         <div class="event-list">{event_html}</div>
     </div>
     """
+    return " ".join(
+        line.strip() for line in timeline_html.splitlines() if line.strip()
+    )
 
 
 def build_summary(rows, events, duration):
@@ -448,9 +452,10 @@ def create_annotated_video(video_path, rows, alert_threshold, progress=None):
         raise ValueError("تعذر إنشاء الفيديو المعلّم.")
 
     output_dir = tempfile.mkdtemp(prefix="scvd_analysis_")
+    raw_output_path = os.path.join(output_dir, "scvd_annotated_raw.mp4")
     output_path = os.path.join(output_dir, "scvd_annotated.mp4")
     writer = cv2.VideoWriter(
-        output_path,
+        raw_output_path,
         cv2.VideoWriter_fourcc(*"mp4v"),
         fps,
         (width, height),
@@ -575,7 +580,40 @@ def create_annotated_video(video_path, rows, alert_threshold, progress=None):
 
     cap.release()
     writer.release()
-    return output_path
+
+    # Browsers do not reliably play OpenCV's mp4v output. Convert it to
+    # H.264/yuv420p and move metadata to the beginning for web streaming.
+    try:
+        conversion = subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                raw_output_path,
+                "-c:v",
+                "libx264",
+                "-preset",
+                "veryfast",
+                "-crf",
+                "23",
+                "-pix_fmt",
+                "yuv420p",
+                "-movflags",
+                "+faststart",
+                "-an",
+                output_path,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=600,
+            check=False,
+        )
+        if conversion.returncode == 0 and os.path.getsize(output_path) > 0:
+            os.remove(raw_output_path)
+            return output_path
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        pass
+    return raw_output_path
 
 
 def build_explanation(rows, events, duration, alert_threshold):
