@@ -16,8 +16,7 @@ An explainable CCTV video-analysis dashboard for classifying video segments as
 
 ## Live demo
 
-The permanent Streamlit Community Cloud link will be added here after
-deployment.
+[Open the live SCVD dashboard on Streamlit](https://scvd-violence-detection-m9rb8lphpu2lpth3p97xqr.streamlit.app/)
 
 The interface includes `test.mp4`, so reviewers can test the full workflow
 without supplying their own video.
