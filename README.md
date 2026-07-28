@@ -16,13 +16,14 @@ An explainable CCTV video-analysis dashboard for classifying video segments as
 
 ## Live demo
 
-The permanent deployment link will be added here after the Render deployment.
+The permanent Streamlit Community Cloud link will be added here after
+deployment.
 
 The interface includes `test.mp4`, so reviewers can test the full workflow
 without supplying their own video.
 
-> The free deployment may sleep after a period of inactivity. The first request
-> after sleep can take about one minute while the service starts.
+> The free Streamlit deployment may sleep after a period of inactivity. Any
+> visitor can wake it again from the public app page.
 
 ## Features
 
@@ -61,14 +62,14 @@ inside it is the aggressor.
 
 ```bash
 pip install -r requirements.txt
-python app.py
+streamlit run streamlit_app.py
 ```
 
 Required files:
 
 - `best_model.pth`
 - `SCVD_Professional_GUI.py`
-- `app.py`
+- `streamlit_app.py`
 - `test.mp4`
 
 ## Dataset

@@ -10,12 +10,6 @@ import torch
 import torch.nn as nn
 from torchvision import models, transforms
 
-try:
-    from ultralytics import YOLO
-except ImportError:
-    YOLO = None
-
-
 CLASSES = ["Normal", "Violence", "Weaponized"]
 CLASS_AR = {
     "Normal": "طبيعي",
@@ -93,7 +87,9 @@ DETECTOR = None
 def get_detector():
     """Load the detector only when annotated-video output is requested."""
     global DETECTOR
-    if YOLO is None:
+    try:
+        from ultralytics import YOLO
+    except ImportError:
         raise RuntimeError(
             "مكتبة ultralytics غير مثبتة. نفّذ: pip install ultralytics"
         )
