@@ -16,10 +16,13 @@ An explainable CCTV video-analysis dashboard for classifying video segments as
 
 ## Live demo
 
-The deployed Hugging Face Space link will be added here after deployment.
+The permanent deployment link will be added here after the Render deployment.
 
 The interface includes `test.mp4`, so reviewers can test the full workflow
 without supplying their own video.
+
+> The free deployment may sleep after a period of inactivity. The first request
+> after sleep can take about one minute while the service starts.
 
 ## Features
 
